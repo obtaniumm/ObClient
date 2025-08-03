@@ -6,7 +6,7 @@ import java.util.Map;
 public class FeatureManager {
 
     private static FeatureManager instance = new FeatureManager();
-    private Map<String, Boolean> features = new HashMap<>();
+    private Map<String, Boolean> features = new HashMap<String, Boolean>();
 
     private FeatureManager() {
         // Initialize features as disabled - matching your reference image
