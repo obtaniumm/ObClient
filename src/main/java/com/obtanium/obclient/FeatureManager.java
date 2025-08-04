@@ -9,13 +9,13 @@ public class FeatureManager {
 
     private FeatureManager() {
         // Initialize features as disabled
-        features.put("Watchdog Bypass", false);
-        features.put("Fully safe walk", false);
-        features.put("0Cps Disable", false);
-        features.put("Literal Lag", false);
-        features.put("250+ Fps", false);
-        features.put("Brick Wall", false);
-        features.put("Fall off", false);
+        features.put("WatchdogBypass", false);
+        features.put("UnsafeWalk", false);
+        features.put("0CPSAutoclicker", false);
+        features.put("RealLag", false);
+        features.put("500+ FPS", false);
+        features.put("BrickWall", false);
+        features.put("FallOff", false);
     }
 
     public static FeatureManager getInstance() {

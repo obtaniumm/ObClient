@@ -19,13 +19,13 @@ public class GuiInGameObClient extends GuiScreen {
     private static final int BACKGROUND_OVERLAY = 0xCC000000;
 
     private final String[] features = {
-            "Watchdog Bypass",
-            "Fully safe walk",
-            "0Cps Disable",
-            "Literal Lag",
-            "250+ Fps",
-            "Brick Wall",
-            "Fall off"
+            "WatchdogBypass",
+            "UnsafeWalk",
+            "0CPSAutoclicker",
+            "RealLag",
+            "500+ FPS",
+            "BrickWall",
+            "FallOff"
     };
 
     @Override

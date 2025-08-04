@@ -17,13 +17,13 @@ public class GuiObClient extends GuiScreen {
 
     // Feature list matching your reference image
     private final String[] features = {
-            "Watchdog Bypass",
-            "Fully safe walk",
-            "0Cps Disable",
-            "Literal Lag",
-            "250+ Fps",
-            "Brick Wall",
-            "Fall off"
+            "WatchdogBypass",
+            "UnsafeWalk",
+            "0CPSAutoclicker",
+            "RealLag",
+            "500+ FPS",
+            "BrickWall",
+            "FallOff"
     };
 
     // Colors - matching the blue theme from your image
