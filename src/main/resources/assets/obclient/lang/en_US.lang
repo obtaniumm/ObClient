@@ -1,0 +1,10 @@
+# ObClient Keybind Names for Minecraft Controls Menu
+key.obclient.openmenu=Open ObClient Menu
+key.obclient.togglehud=Toggle ObClient HUD
+key.obclient.watchdog=Quick Toggle Watchdog Bypass
+key.obclient.safewalk=Quick Toggle Safe Walk
+
+# Other translations (optional)
+gui.obclient.title=ObClient Settings
+gui.obclient.features=Features
+gui.obclient.colors=Color Settings

@@ -1,6 +1,5 @@
 package com.obtanium.obclient;
 
-import com.obtanium.obclient.commands.ObClientCommandHandler;
 import com.obtanium.obclient.gui.GuiObClient;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraftforge.client.event.GuiOpenEvent;
@@ -20,6 +19,7 @@ public class ObClient {
     public static ObClient instance;
 
     private HUDRenderer hudRenderer;
+    private KeyBindHandler keyBindHandler;
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -32,12 +32,16 @@ public class ObClient {
     public void init(FMLInitializationEvent event) {
         System.out.println("ObClient initialized successfully!");
 
+        // Initialize managers
+        ColorManager.getInstance(); // Initialize color settings
+
         // Initialize and register HUD renderer
         hudRenderer = new HUDRenderer();
         MinecraftForge.EVENT_BUS.register(hudRenderer);
 
-        // Register client commands
-        ObClientCommandHandler.registerCommands();
+        // Initialize and register keybind handler
+        keyBindHandler = new KeyBindHandler();
+        MinecraftForge.EVENT_BUS.register(keyBindHandler);
     }
 
     @SubscribeEvent

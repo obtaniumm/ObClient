@@ -9,28 +9,33 @@ import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.lwjgl.opengl.GL11;
 
 public class HUDRenderer {
     private Minecraft mc;
     private FeatureManager featureManager;
+    private ColorManager colorManager;
 
-    // Colors matching your client theme
-    private static final int GREEN_COLOR = 0x00FF00;
-    private static final int BLUE_COLOR = 0x4da6ff;
-    private static final int LIGHT_BLUE_COLOR = 0x66b3ff;
-    private static final int WHITE_COLOR = 0xFFFFFF;
-    private static final int BACKGROUND_COLOR = 0x80000000; // Semi-transparent black
+    private static boolean hudVisible = true;
 
     public HUDRenderer() {
         this.mc = Minecraft.getMinecraft();
         this.featureManager = FeatureManager.getInstance();
+        this.colorManager = ColorManager.getInstance();
+    }
+
+    public static void toggleVisibility() {
+        hudVisible = !hudVisible;
+        System.out.println("[ObClient] HUD visibility: " + (hudVisible ? "ON" : "OFF"));
+    }
+
+    public static boolean isVisible() {
+        return hudVisible;
     }
 
     @SubscribeEvent
     public void onRenderGameOverlay(RenderGameOverlayEvent.Post event) {
         if (event.type == RenderGameOverlayEvent.ElementType.ALL) {
-            if (!mc.gameSettings.showDebugInfo && mc.currentScreen == null) {
+            if (!mc.gameSettings.showDebugInfo && mc.currentScreen == null && hudVisible) {
                 renderModuleList();
             }
         }
@@ -56,29 +61,28 @@ public class HUDRenderer {
             }
         }
 
-        if (enabledCount == 0) return; // Don't show anything if no features are enabled
+        if (enabledCount == 0) return;
 
-        // Position settings - top right corner like your reference
+        // Position settings - top right corner
         int xOffset = sr.getScaledWidth() - maxWidth - 6;
         int yOffset = 2;
         int lineHeight = fontRenderer.FONT_HEIGHT + 2;
 
         // Draw background for the entire list
         int bgHeight = (enabledCount * lineHeight) + 4;
-        drawRect(xOffset - 4, yOffset - 2, sr.getScaledWidth() - 2, yOffset + bgHeight - 2, BACKGROUND_COLOR);
+        drawRect(xOffset - 4, yOffset - 2, sr.getScaledWidth() - 2, yOffset + bgHeight - 2,
+                colorManager.getHudBackgroundColor());
 
         // Draw each enabled feature
         int currentY = yOffset;
         for (String feature : allFeatures) {
             if (featureManager.isFeatureEnabled(feature)) {
-                // Draw feature name with color (green for enabled, matching your theme)
-                fontRenderer.drawStringWithShadow(feature, xOffset, currentY, GREEN_COLOR);
+                fontRenderer.drawStringWithShadow(feature, xOffset, currentY, colorManager.getHudTextColor());
                 currentY += lineHeight;
             }
         }
     }
 
-    // Helper method to draw rectangles
     private void drawRect(int left, int top, int right, int bottom, int color) {
         if (left < right) {
             int temp = left;

@@ -8,7 +8,7 @@ public class FeatureManager {
     private Map<String, Boolean> features = new HashMap<>();
 
     private FeatureManager() {
-        // Initialize features as disabled - matching your reference image
+        // Initialize features as disabled
         features.put("Watchdog Bypass", false);
         features.put("Fully safe walk", false);
         features.put("0Cps Disable", false);
@@ -32,19 +32,16 @@ public class FeatureManager {
         System.out.println("[ObClient] Feature '" + featureName + "' is now " +
                 (newState ? "ENABLED" : "DISABLED"));
 
-        // Feature implementations for Arch Linux
+        // Feature implementations
         if (featureName.equals("250+ Fps")) {
             if (newState) {
-                // Linux-specific FPS optimization
                 System.setProperty("java.awt.headless", "true");
             }
         } else if (featureName.equals("Fully safe walk")) {
-            // Safe walk implementation
             if (newState) {
                 System.out.println("[ObClient] Safe walk activated");
             }
         }
-        // Add more feature implementations as needed
     }
 
     public String getFeatureStatus(String featureName) {
