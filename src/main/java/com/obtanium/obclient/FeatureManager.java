@@ -4,9 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FeatureManager {
-
     private static FeatureManager instance = new FeatureManager();
-    private Map<String, Boolean> features = new HashMap<String, Boolean>();
+    private Map<String, Boolean> features = new HashMap<>();
 
     private FeatureManager() {
         // Initialize features as disabled - matching your reference image
@@ -14,7 +13,7 @@ public class FeatureManager {
         features.put("Fully safe walk", false);
         features.put("0Cps Disable", false);
         features.put("Literal Lag", false);
-        features.put("500+ Fps", false);
+        features.put("250+ Fps", false);
         features.put("Brick Wall", false);
         features.put("Fall off", false);
     }
@@ -34,7 +33,7 @@ public class FeatureManager {
                 (newState ? "ENABLED" : "DISABLED"));
 
         // Feature implementations for Arch Linux
-        if (featureName.equals("500+ FPS")) {
+        if (featureName.equals("250+ Fps")) {
             if (newState) {
                 // Linux-specific FPS optimization
                 System.setProperty("java.awt.headless", "true");
