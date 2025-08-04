@@ -1,6 +1,6 @@
 package com.obtanium.obclient;
 
-import com.obtanium.obclient.commands.ClientCommandHandler;
+import com.obtanium.obclient.commands.ObClientCommandHandler;
 import com.obtanium.obclient.gui.GuiObClient;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraftforge.client.event.GuiOpenEvent;
@@ -37,7 +37,7 @@ public class ObClient {
         MinecraftForge.EVENT_BUS.register(hudRenderer);
 
         // Register client commands
-        ClientCommandHandler.registerCommands();
+        ObClientCommandHandler.registerCommands();
     }
 
     @SubscribeEvent
