@@ -29,7 +29,7 @@ public class GuiColorSettings extends GuiScreen {
         int buttonWidth = 150;
         int buttonHeight = 20;
         int startX = this.width / 2 - buttonWidth / 2;
-        int startY = 60; // Moved up to make room for text below
+        int startY = 60;
 
         // Color preset buttons
         for (int i = 0; i < ColorManager.PRESET_COLORS.length; i++) {
@@ -41,6 +41,10 @@ public class GuiColorSettings extends GuiScreen {
             this.buttonList.add(new GuiButton(i, x, y, buttonWidth, buttonHeight,
                     ColorManager.COLOR_NAMES[i]));
         }
+
+        // Background toggle button
+        String bgText = colorManager.isBackgroundEnabled() ? "Background: ON" : "Background: OFF";
+        this.buttonList.add(new GuiButton(97, this.width / 2 - 75, startY + 150, 150, 20, bgText));
 
         // Back button
         this.buttonList.add(new GuiButton(99, this.width / 2 - 50, this.height - 40, 100, 20, "Back"));
@@ -56,7 +60,7 @@ public class GuiColorSettings extends GuiScreen {
 
         // Main panel background
         int panelWidth = 450;
-        int panelHeight = 400;
+        int panelHeight = 450;
         int panelX = this.width / 2 - panelWidth / 2;
         int panelY = this.height / 2 - panelHeight / 2;
 
@@ -68,22 +72,24 @@ public class GuiColorSettings extends GuiScreen {
         int titleWidth = this.fontRendererObj.getStringWidth(title);
         this.fontRendererObj.drawStringWithShadow(title, this.width / 2 - titleWidth / 2, panelY + 15, WHITE_COLOR);
 
-        // Color preview (moved up)
+        // Color preview
         String previewText = "Preview Text";
         int previewWidth = this.fontRendererObj.getStringWidth(previewText);
         int previewX = this.width / 2 - previewWidth / 2;
         int previewY = panelY + 35;
 
-        // Draw preview background
-        drawRect(previewX - 5, previewY - 2, previewX + previewWidth + 5, previewY + 12,
-                colorManager.getHudBackgroundColor());
+        // Draw preview background only if enabled
+        if (colorManager.isBackgroundEnabled()) {
+            drawRect(previewX - 5, previewY - 2, previewX + previewWidth + 5, previewY + 12,
+                    colorManager.getHudBackgroundColor());
+        }
 
         // Draw preview text with current color (including rainbow if enabled)
         this.fontRendererObj.drawStringWithShadow(previewText, previewX, previewY,
                 colorManager.getHudTextColor());
 
-        // Information text below buttons
-        int textStartY = panelY + 260; // Below the button area
+        // Information text below buttons (moved further down)
+        int textStartY = panelY + 230;
 
         // Current color info
         String currentColorName = colorManager.getColorName(colorManager.getHudTextColor());
@@ -91,25 +97,30 @@ public class GuiColorSettings extends GuiScreen {
         int currentColorWidth = this.fontRendererObj.getStringWidth(currentColorText);
         this.fontRendererObj.drawString(currentColorText, this.width / 2 - currentColorWidth / 2, textStartY, 0xAAAAA);
 
+        // Background status
+        String backgroundStatus = "Background: " + (colorManager.isBackgroundEnabled() ? "Enabled" : "Disabled");
+        int bgStatusWidth = this.fontRendererObj.getStringWidth(backgroundStatus);
+        this.fontRendererObj.drawString(backgroundStatus, this.width / 2 - bgStatusWidth / 2, textStartY + 15, 0xAAAAA);
+
         // Instructions
         String instructions1 = "Click a color to change HUD text color";
         String instructions2 = "Rainbow mode creates animated color cycling";
-        String instructions3 = "Changes apply immediately to all HUD elements";
+        String instructions3 = "Toggle background to show/hide HUD background";
 
         int instr1Width = this.fontRendererObj.getStringWidth(instructions1);
         int instr2Width = this.fontRendererObj.getStringWidth(instructions2);
         int instr3Width = this.fontRendererObj.getStringWidth(instructions3);
 
-        this.fontRendererObj.drawString(instructions1, this.width / 2 - instr1Width / 2, textStartY + 20, 0x888888);
-        this.fontRendererObj.drawString(instructions2, this.width / 2 - instr2Width / 2, textStartY + 35, 0x888888);
-        this.fontRendererObj.drawString(instructions3, this.width / 2 - instr3Width / 2, textStartY + 50, 0x888888);
+        this.fontRendererObj.drawString(instructions1, this.width / 2 - instr1Width / 2, textStartY + 35, 0x888888);
+        this.fontRendererObj.drawString(instructions2, this.width / 2 - instr2Width / 2, textStartY + 50, 0x888888);
+        this.fontRendererObj.drawString(instructions3, this.width / 2 - instr3Width / 2, textStartY + 65, 0x888888);
 
         // Rainbow mode status
         if (colorManager.isRainbowMode()) {
             String rainbowStatus = "Rainbow Mode: ACTIVE";
             int rainbowWidth = this.fontRendererObj.getStringWidth(rainbowStatus);
             // Draw with rainbow color
-            this.fontRendererObj.drawStringWithShadow(rainbowStatus, this.width / 2 - rainbowWidth / 2, textStartY + 70, colorManager.getHudTextColor());
+            this.fontRendererObj.drawStringWithShadow(rainbowStatus, this.width / 2 - rainbowWidth / 2, textStartY + 85, colorManager.getHudTextColor());
         }
 
         GlStateManager.disableBlend();
@@ -121,6 +132,12 @@ public class GuiColorSettings extends GuiScreen {
         if (button.id == 99) {
             // Back button
             this.mc.displayGuiScreen(parentScreen);
+        } else if (button.id == 97) {
+            // Background toggle button
+            colorManager.toggleBackground();
+            // Update button text
+            String bgText = colorManager.isBackgroundEnabled() ? "Background: ON" : "Background: OFF";
+            button.displayString = bgText;
         } else if (button.id >= 0 && button.id < ColorManager.PRESET_COLORS.length) {
             // Color button
             if (colorManager.isRainbowIndex(button.id)) {

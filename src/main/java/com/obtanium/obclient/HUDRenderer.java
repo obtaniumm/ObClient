@@ -63,15 +63,18 @@ public class HUDRenderer {
 
         if (enabledCount == 0) return;
 
-        // Position settings - top right corner
-        int xOffset = sr.getScaledWidth() - maxWidth - 6;
+        // Position settings - top right corner, moved more to the left
+        int rightOffset = 5; // Move 20 pixels to the left from the edge
+        int xOffset = sr.getScaledWidth() - maxWidth - 6 - rightOffset;
         int yOffset = 2;
         int lineHeight = fontRenderer.FONT_HEIGHT + 2;
 
-        // Draw background for the entire list
-        int bgHeight = (enabledCount * lineHeight) + 4;
-        drawRect(xOffset - 4, yOffset - 2, sr.getScaledWidth() - 2, yOffset + bgHeight - 2,
-                colorManager.getHudBackgroundColor());
+        // Draw background for the entire list only if enabled
+        if (colorManager.isBackgroundEnabled()) {
+            int bgHeight = (enabledCount * lineHeight) + 4;
+            drawRect(xOffset - 4, yOffset - 2, sr.getScaledWidth() - 2 - rightOffset, yOffset + bgHeight - 2,
+                    colorManager.getHudBackgroundColor());
+        }
 
         // Draw each enabled feature
         int currentY = yOffset;

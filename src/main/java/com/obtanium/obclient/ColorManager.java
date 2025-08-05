@@ -9,6 +9,7 @@ public class ColorManager {
     private int hudTextColor = 0x00FF00; // Green
     private int hudBackgroundColor = 0x80000000; // Semi-transparent black
     private boolean rainbowMode = false;
+    private boolean backgroundEnabled = true; // Background visibility toggle
     private int rainbowOffset = 0;
 
     // Predefined color options (now includes rainbow)
@@ -73,7 +74,7 @@ public class ColorManager {
 
     private int getRainbowColor() {
         // Create smooth rainbow effect
-        rainbowOffset += 2; // Speed of color change
+        rainbowOffset += 1; // Speed of color change
         if (rainbowOffset >= 360) {
             rainbowOffset = 0;
         }
@@ -88,6 +89,20 @@ public class ColorManager {
     public void setHudBackgroundColor(int color) {
         this.hudBackgroundColor = color;
         System.out.println("[ObClient] HUD background color changed to: " + Integer.toHexString(color));
+    }
+
+    public boolean isBackgroundEnabled() {
+        return backgroundEnabled;
+    }
+
+    public void setBackgroundEnabled(boolean enabled) {
+        this.backgroundEnabled = enabled;
+        System.out.println("[ObClient] HUD background " + (enabled ? "enabled" : "disabled"));
+    }
+
+    public void toggleBackground() {
+        this.backgroundEnabled = !this.backgroundEnabled;
+        System.out.println("[ObClient] HUD background " + (backgroundEnabled ? "enabled" : "disabled"));
     }
 
     public String getColorName(int color) {
