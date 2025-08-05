@@ -35,7 +35,7 @@ public class GuiInGameObClient extends GuiScreen {
         int buttonWidth = 200;
         int buttonHeight = 20;
         int startX = this.width / 2 - 100;
-        int startY = 60;
+        int startY = 50; // Moved up to make room for text below
 
         // Create toggle buttons for each feature
         for (int i = 0; i < features.length; i++) {
@@ -47,7 +47,7 @@ public class GuiInGameObClient extends GuiScreen {
         }
 
         // Color settings button
-        this.buttonList.add(new GuiButton(98, this.width / 2 - 100, this.height - 70, 200, 20, "Color Settings"));
+        this.buttonList.add(new GuiButton(98, this.width / 2 - 100, startY + (features.length * 25) + 10, 200, 20, "Color Settings"));
 
         // Close button
         this.buttonList.add(new GuiButton(99, this.width / 2 - 50, this.height - 40, 100, 20, "Close"));
@@ -62,8 +62,8 @@ public class GuiInGameObClient extends GuiScreen {
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
 
         // Main panel background
-        int panelWidth = 350;
-        int panelHeight = 420;
+        int panelWidth = 400;
+        int panelHeight = 480;
         int panelX = this.width / 2 - panelWidth / 2;
         int panelY = this.height / 2 - panelHeight / 2;
 
@@ -75,23 +75,38 @@ public class GuiInGameObClient extends GuiScreen {
         int titleWidth = this.fontRendererObj.getStringWidth(title);
         this.fontRendererObj.drawStringWithShadow(title, this.width / 2 - titleWidth / 2, panelY + 15, WHITE_COLOR);
 
-        // Keybind information
-        String menuKey = getKeyDisplayString(KeyBindHandler.getOpenMenuKey());
-        String hudKey = getKeyDisplayString(KeyBindHandler.getToggleHUDKey());
-
-        this.fontRendererObj.drawString("Open Menu: " + menuKey, panelX + 10, panelY + 35, 0xAAAAAA);
-        this.fontRendererObj.drawString("Toggle HUD: " + hudKey, panelX + 10, panelY + 45, 0xAAAAAA);
+        // Information text below buttons
+        int textStartY = panelY + 270; // Below the button area
 
         // Statistics
         int activeCount = FeatureManager.getInstance().getActiveFeatureCount();
         String stats = "Active Features: " + activeCount + "/" + features.length;
         int statsWidth = this.fontRendererObj.getStringWidth(stats);
-        this.fontRendererObj.drawString(stats, this.width / 2 - statsWidth / 2, panelY + panelHeight - 100, BLUE_COLOR);
+        this.fontRendererObj.drawString(stats, this.width / 2 - statsWidth / 2, textStartY, BLUE_COLOR);
 
-        // Instructions
+        // Keybind information
+        String menuKey = getKeyDisplayString(KeyBindHandler.getOpenMenuKey());
+        String hudKey = getKeyDisplayString(KeyBindHandler.getToggleHUDKey());
+
+        this.fontRendererObj.drawString("Keybinds:", panelX + 10, textStartY + 20, WHITE_COLOR);
+        this.fontRendererObj.drawString("• Open Menu: " + menuKey, panelX + 10, textStartY + 35, 0xAAAAA);
+        this.fontRendererObj.drawString("• Toggle HUD: " + hudKey, panelX + 10, textStartY + 50, 0xAAAAA);
+
+        // Feature descriptions
+        this.fontRendererObj.drawString("Feature Information:", panelX + 10, textStartY + 70, WHITE_COLOR);
+        this.fontRendererObj.drawString("• Click feature buttons to toggle ON/OFF", panelX + 10, textStartY + 85, 0x888888);
+        this.fontRendererObj.drawString("• Green [ON] means feature is active", panelX + 10, textStartY + 100, 0x888888);
+        this.fontRendererObj.drawString("• Gray [OFF] means feature is disabled", panelX + 10, textStartY + 115, 0x888888);
+
+        // Instructions for keybinds
         String instructions = "Change keybinds in Options > Controls > ObClient";
         int instrWidth = this.fontRendererObj.getStringWidth(instructions);
-        this.fontRendererObj.drawString(instructions, this.width / 2 - instrWidth / 2, panelY + panelHeight - 85, 0x888888);
+        this.fontRendererObj.drawString(instructions, this.width / 2 - instrWidth / 2, textStartY + 140, 0x666666);
+
+        // Additional help text
+        String helpText = "Press ESC or click Close to exit this menu";
+        int helpWidth = this.fontRendererObj.getStringWidth(helpText);
+        this.fontRendererObj.drawString(helpText, this.width / 2 - helpWidth / 2, textStartY + 155, 0x666666);
 
         GlStateManager.disableBlend();
         super.drawScreen(mouseX, mouseY, partialTicks);

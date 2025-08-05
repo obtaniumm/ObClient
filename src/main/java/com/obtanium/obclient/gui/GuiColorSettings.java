@@ -29,7 +29,7 @@ public class GuiColorSettings extends GuiScreen {
         int buttonWidth = 150;
         int buttonHeight = 20;
         int startX = this.width / 2 - buttonWidth / 2;
-        int startY = 80;
+        int startY = 60; // Moved up to make room for text below
 
         // Color preset buttons
         for (int i = 0; i < ColorManager.PRESET_COLORS.length; i++) {
@@ -55,8 +55,8 @@ public class GuiColorSettings extends GuiScreen {
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
 
         // Main panel background
-        int panelWidth = 400;
-        int panelHeight = 350;
+        int panelWidth = 450;
+        int panelHeight = 400;
         int panelX = this.width / 2 - panelWidth / 2;
         int panelY = this.height / 2 - panelHeight / 2;
 
@@ -68,30 +68,49 @@ public class GuiColorSettings extends GuiScreen {
         int titleWidth = this.fontRendererObj.getStringWidth(title);
         this.fontRendererObj.drawStringWithShadow(title, this.width / 2 - titleWidth / 2, panelY + 15, WHITE_COLOR);
 
-        // Current color info
-        String currentColorName = colorManager.getColorName(colorManager.getHudTextColor());
-        String currentColorText = "Current Color: " + currentColorName;
-        int currentColorWidth = this.fontRendererObj.getStringWidth(currentColorText);
-        this.fontRendererObj.drawString(currentColorText, this.width / 2 - currentColorWidth / 2, panelY + 35, 0xAAAAAA);
-
-        // Color preview
+        // Color preview (moved up)
         String previewText = "Preview Text";
         int previewWidth = this.fontRendererObj.getStringWidth(previewText);
         int previewX = this.width / 2 - previewWidth / 2;
-        int previewY = panelY + 50;
+        int previewY = panelY + 35;
 
         // Draw preview background
         drawRect(previewX - 5, previewY - 2, previewX + previewWidth + 5, previewY + 12,
                 colorManager.getHudBackgroundColor());
 
-        // Draw preview text
+        // Draw preview text with current color (including rainbow if enabled)
         this.fontRendererObj.drawStringWithShadow(previewText, previewX, previewY,
                 colorManager.getHudTextColor());
 
+        // Information text below buttons
+        int textStartY = panelY + 260; // Below the button area
+
+        // Current color info
+        String currentColorName = colorManager.getColorName(colorManager.getHudTextColor());
+        String currentColorText = "Current Color: " + currentColorName;
+        int currentColorWidth = this.fontRendererObj.getStringWidth(currentColorText);
+        this.fontRendererObj.drawString(currentColorText, this.width / 2 - currentColorWidth / 2, textStartY, 0xAAAAA);
+
         // Instructions
-        String instructions = "Click a color to change HUD text color";
-        int instrWidth = this.fontRendererObj.getStringWidth(instructions);
-        this.fontRendererObj.drawString(instructions, this.width / 2 - instrWidth / 2, panelY + panelHeight - 60, 0x888888);
+        String instructions1 = "Click a color to change HUD text color";
+        String instructions2 = "Rainbow mode creates animated color cycling";
+        String instructions3 = "Changes apply immediately to all HUD elements";
+
+        int instr1Width = this.fontRendererObj.getStringWidth(instructions1);
+        int instr2Width = this.fontRendererObj.getStringWidth(instructions2);
+        int instr3Width = this.fontRendererObj.getStringWidth(instructions3);
+
+        this.fontRendererObj.drawString(instructions1, this.width / 2 - instr1Width / 2, textStartY + 20, 0x888888);
+        this.fontRendererObj.drawString(instructions2, this.width / 2 - instr2Width / 2, textStartY + 35, 0x888888);
+        this.fontRendererObj.drawString(instructions3, this.width / 2 - instr3Width / 2, textStartY + 50, 0x888888);
+
+        // Rainbow mode status
+        if (colorManager.isRainbowMode()) {
+            String rainbowStatus = "Rainbow Mode: ACTIVE";
+            int rainbowWidth = this.fontRendererObj.getStringWidth(rainbowStatus);
+            // Draw with rainbow color
+            this.fontRendererObj.drawStringWithShadow(rainbowStatus, this.width / 2 - rainbowWidth / 2, textStartY + 70, colorManager.getHudTextColor());
+        }
 
         GlStateManager.disableBlend();
         super.drawScreen(mouseX, mouseY, partialTicks);
@@ -104,8 +123,14 @@ public class GuiColorSettings extends GuiScreen {
             this.mc.displayGuiScreen(parentScreen);
         } else if (button.id >= 0 && button.id < ColorManager.PRESET_COLORS.length) {
             // Color button
-            int selectedColor = colorManager.getPresetColor(button.id);
-            colorManager.setHudTextColor(selectedColor);
+            if (colorManager.isRainbowIndex(button.id)) {
+                // Enable rainbow mode
+                colorManager.setRainbowMode(true);
+            } else {
+                // Set normal color
+                int selectedColor = colorManager.getPresetColor(button.id);
+                colorManager.setHudTextColor(selectedColor);
+            }
         }
     }
 
